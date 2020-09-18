@@ -26,39 +26,41 @@ public class App {
             // we use the input file name to create a file path to the image in our resources folder
             img = ImageIO.read(new File("src/main/resources/" + inputFileName +".bmp" ));
         } catch (IOException e) {
-
+            System.out.println("Invalid input file path");
         }
         int height = img.getHeight();
         int width = img.getWidth();
 
-        final BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
-//        System.out.println(height  + "  " +  width + " " + img.getRGB(30, 30));
-        int red;
-        int rgb;
+        BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        int red=0;
+        int rgb=0;
 
         for (int h = 1; h<height; h++)
         {
             for (int w = 1; w<width; w++)
             {
                 rgb = img.getRGB(h,w);
-                System.out.println(img.getRGB(h, w));
                 switch(transformName) {
                     case "makeYellow":
-                        if (rgb == -1) {
-                            red = (rgb) & 0x00FFFF00;
-                            newImage.setRGB(h, w, red);
-                        } else {
-                            newImage.setRGB(h, w, rgb);
-                        }
+                        red = (rgb) & 0x00FFFF00;
+                        break;
                     case "makeBlue":
-                        if (rgb == -1) {
-                            red = (rgb) & 0x000000FF;
-                            newImage.setRGB(h, w, red);
-                        } else {
-                            newImage.setRGB(h, w, rgb);
-                        }
-
+                        red = (rgb) & 0x000000FF;
+                        break;
+                    case "randomize":
+                        double num = Math.random();
+                        if (num<0.33){
+                                red = (rgb) & 0x00FF7F7F;}
+                        else if (num<0.66){
+                                red = (rgb)&0x0000FF00;}
+                        else {
+                                red = (rgb)&0x007F7F7F;}
+                        break;
+                }
+                if (rgb == -1) {
+                    newImage.setRGB(h, w, red);
+                } else {
+                    newImage.setRGB(h, w, rgb);
                 }
             }
         }
@@ -66,7 +68,7 @@ public class App {
             // we use the output file name to create a file path to the new image in the resources folder
             ImageIO.write(newImage, "bmp", new File("src/main/resources/"+ outputFileName +".bmp"));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Invalid output filePath!");
         }
     }
 }
