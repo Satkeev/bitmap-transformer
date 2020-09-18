@@ -29,6 +29,8 @@ public class Bitmap {
             for (int w = 1; w<width; w++)
             {
                 Color pixelColor = new Color(img.getRGB(h, w), true);
+                System.out.println(pixelColor);
+                System.out.println(img.getRGB(h, w));
                 newImage.setRGB(h, w, yellow.getRGB());
 
             }
