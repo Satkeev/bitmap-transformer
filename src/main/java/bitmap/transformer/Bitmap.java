@@ -1,9 +1,13 @@
 package bitmap.transformer;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.awt.Color;
+
+import static java.awt.Color.yellow;
 
 public class Bitmap {
     public static void main(String[] args) {
@@ -16,15 +20,7 @@ public class Bitmap {
         int height = img.getHeight();
         int width = img.getWidth();
 
-        int amountPixel = 0;
-        int amountBlackPixel = 0;
-
-        int rgb;
-        int red;
-        int green;
-        int blue;
-
-        double percentPixel = 0;
+        final BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         System.out.println(height  + "  " +  width + " " + img.getRGB(30, 30));
 
@@ -32,25 +28,15 @@ public class Bitmap {
         {
             for (int w = 1; w<width; w++)
             {
-                amountPixel++;
+                Color pixelColor = new Color(img.getRGB(h, w), true);
+                newImage.setRGB(h, w, yellow.getRGB());
 
-                rgb = img.getRGB(w, h);
-                red = (rgb >> 16 ) & 0x000000FF;
-                green = (rgb >> 8 ) & 0x000000FF;
-                blue = (rgb) & 0x000000FF;
-
-                if (red == 0 && green == 0 && blue == 0)
-                {
-                    amountBlackPixel ++;
-                }
             }
         }
-        percentPixel = (double)amountBlackPixel / (double)amountPixel;
-
-        System.out.println("amount pixel: "+amountPixel);
-        System.out.println("amount black pixel: "+amountBlackPixel);
-        System.out.println("amount pixel black percent: "+percentPixel);
+        try {
+            ImageIO.write(newImage, "bmp", new File("src/main/resources/testImage.bmp"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-
 }
