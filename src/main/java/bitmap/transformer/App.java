@@ -3,12 +3,70 @@
  */
 package bitmap.transformer;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public class App {
     public String getGreeting() {
         return "Hello world.";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        // we get three args from the CLI  - input file name as arg[0],  output file name as arg[1], transform name as arg[2]
+        String inputFileName = args[0];
+        String outputFileName= args[1];
+        String transformName = args[2];
+        System.out.println("input: "+ inputFileName + " output: "+ outputFileName+ " transformName: "+transformName);
+
+        BufferedImage img = null;
+        try {
+            // we use the input file name to create a file path to the image in our resources folder
+            img = ImageIO.read(new File("src/main/resources/" + inputFileName +".bmp" ));
+        } catch (IOException e) {
+
+        }
+        int height = img.getHeight();
+        int width = img.getWidth();
+
+        final BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+//        System.out.println(height  + "  " +  width + " " + img.getRGB(30, 30));
+        int red;
+        int rgb;
+
+        for (int h = 1; h<height; h++)
+        {
+            for (int w = 1; w<width; w++)
+            {
+                rgb = img.getRGB(h,w);
+                System.out.println(img.getRGB(h, w));
+                switch(transformName) {
+                    case "makeYellow":
+                        if (rgb == -1) {
+                            red = (rgb) & 0x00FFFF00;
+                            newImage.setRGB(h, w, red);
+                        } else {
+                            newImage.setRGB(h, w, rgb);
+                        }
+                    case "makeBlue":
+                        if (rgb == -1) {
+                            red = (rgb) & 0x000000FF;
+                            newImage.setRGB(h, w, red);
+                        } else {
+                            newImage.setRGB(h, w, rgb);
+                        }
+
+                }
+            }
+        }
+        try {
+            // we use the output file name to create a file path to the new image in the resources folder
+            ImageIO.write(newImage, "bmp", new File("src/main/resources/"+ outputFileName +".bmp"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
