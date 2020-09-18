@@ -11,9 +11,10 @@ import static java.awt.Color.yellow;
 
 public class Bitmap {
     public static void main(String[] args) {
+
         BufferedImage img = null;
         try {
-            img = ImageIO.read(new File("src/main/resources/BitMapImage.bmp" ));
+            img = ImageIO.read(new File("src/main/resources/mario.bmp" ));
         } catch (IOException e) {
 
         }
@@ -22,16 +23,20 @@ public class Bitmap {
 
         final BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
-        System.out.println(height  + "  " +  width + " " + img.getRGB(30, 30));
+//        System.out.println(height  + "  " +  width + " " + img.getRGB(30, 30));
+        int red;
+        int rgb;
 
         for (int h = 1; h<height; h++)
         {
             for (int w = 1; w<width; w++)
             {
+                rgb = img.getRGB(h,w);
                 Color pixelColor = new Color(img.getRGB(h, w), true);
-                System.out.println(pixelColor);
-                System.out.println(img.getRGB(h, w));
-                newImage.setRGB(h, w, yellow.getRGB());
+//                System.out.println(pixelColor);
+//                System.out.println(img.getRGB(h, w));
+                red = (rgb>>8) & 0x00FFFF00;
+                newImage.setRGB(h, w, red);
 
             }
         }
